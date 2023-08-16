@@ -1,0 +1,29 @@
+trigger Scenario1 on Account (before insert,before update,before delete) {
+    
+    
+//Prevent a user from insert/update/delete oepration in Account object
+    if((trigger.isupdate || trigger.isinsert || trigger.isDelete) && Trigger.isBefore){
+        User userRecord =[select id, name from User where username=''];
+        if(userRecord.id==userinfo.getuserid()){
+            if(Trigger.IsDelete){
+                for(Account acc: Trigger.old){
+                    acc.adderror('Can not Delete a record');
+                  }
+            }
+            if(Trigger.isUpdate){
+                for(Account accRec:Trigger.old){
+                    accRec.adderror('Can not Update a record');
+                 
+                }
+            }
+            if(Trigger.isInsert){
+                for (Account accRecord:Trigger.new){
+                    accRecord.adderror('Can not insert a record');
+                    
+                }
+            }
+        }
+        
+    }
+    
+}
